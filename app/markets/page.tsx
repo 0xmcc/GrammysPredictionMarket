@@ -1,8 +1,11 @@
+import { getMarkets } from '@/lib/db/market'
 import { MarketList } from '@/components/MarketList'
 import TrendingMarkets from '@/components/TrendingMarkets'
 import PopularArtists from '@/components/PopularArtists'
 
-export default function MarketsPage() {
+export default async function MarketsPage() {
+  const markets = await getMarkets()
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -10,7 +13,7 @@ export default function MarketsPage() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <MarketList />
+          <MarketList initialMarkets={markets} />
         </div>
         <div className="space-y-8">
           <TrendingMarkets />
