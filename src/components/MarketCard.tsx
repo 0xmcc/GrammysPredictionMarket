@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useWallet } from '@/context/WalletContext';
 import type { Market } from '@/lib/types/market'
+import { calculatePercentage } from './market-card/utils'
 
 interface Nominee {
   name: string;
@@ -31,7 +32,9 @@ export function MarketCard({
   const { isConnected, connect } = useWallet();
   
   const isTrendingUp = true// trend.startsWith('+');
-  const sortedNominees = [...market.market_outcomes].sort((a, b) => b.odds - a.odds);
+  const sortedNominees = [...market.market_outcomes]
+    .filter(outcome => outcome?.entity)
+  //  .sort((a, b) => b.odds - a.odds);
 
   const handleBet = async () => {
     if (!isConnected) {
@@ -47,6 +50,19 @@ export function MarketCard({
       console.error('Error placing bet:', error);
     }
   };
+
+  const handleOutcomeSelect = (outcomeId: string) => {
+    try {
+      const outcome = market.market_outcomes.find(o => o.id === outcomeId)
+      if (!outcome?.entity) {
+        console.warn(`Outcome ${outcomeId} has no entity data`)
+        return
+      }
+      setSelectedOutcomeId(outcomeId)
+    } catch (error) {
+      console.error('Error selecting outcome:', error)
+    }
+  }
 
   return (
     <div 
@@ -111,24 +127,26 @@ export function MarketCard({
           <div className="grid grid-cols-1 gap-4 mt-4">
             {sortedNominees.map((nominee) => (
               <div 
-                key={nominee.name}
+                key={nominee.id}
                 className={`flex items-center justify-between p-4 rounded-lg cursor-pointer transition
-                  ${selectedNominee === nominee.name 
+                  ${selectedNominee === nominee.entity.name 
                     ? 'bg-purple-600/20 ring-2 ring-purple-500' 
                     : 'bg-gray-700/50 hover:bg-gray-700'}`}
-                onClick={() => setSelectedNominee(nominee.name)}
+                onClick={() => setSelectedNominee(nominee.entity.name)}
               >
                 <div className="flex items-center space-x-4">
                   <img 
-                    src={nominee.imageUrl} 
-                    alt={nominee.name}
+                    src={nominee.entity.image_url} 
+                    alt={nominee.entity.name}
                     className="w-12 h-12 rounded-full object-cover"
                   />
-                  <span className="font-medium">{nominee.name}</span>
+                  <span className="font-medium">{nominee.entity.name}</span>
                 </div>
                 <div className="text-right">
                   <div className="text-sm text-gray-400">Likelihood</div>
-                  <div className="font-bold text-purple-400">{nominee.odds.toFixed(2)}%</div>
+                  <div className="font-bold text-purple-400">
+                    {calculatePercentage(nominee.total_stake, market.market_outcomes.reduce((sum, o) => sum + o.total_stake, 0)).toFixed(2)}%
+                  </div>
                 </div>
               </div>
             ))}
