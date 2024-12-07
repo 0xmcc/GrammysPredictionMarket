@@ -15,13 +15,22 @@ export function MarketList({ initialMarkets }: MarketListProps) {
   )
   const [isLoading] = useState(false)
   const [isMock] = useState(initialMarkets.length === 0)
+  const [error] = useState<Error | null>(null);
+
+  if (error) {
+    return (
+      <div className="text-red-500">
+        Failed to load markets. Please try again.
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
       <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
+      {Array.from({ length: 3 }).map((_, i) => (
           <div 
-            key={i} 
+          key={`skeleton-${i}`}
             className="h-48 bg-gray-800 rounded-xl animate-pulse"
           />
         ))}
@@ -36,10 +45,12 @@ export function MarketList({ initialMarkets }: MarketListProps) {
           Showing mock data - database connection unavailable
         </div>
       )}
-      {markets.map((market) => (
+      {markets.map(market => (
         <MarketCard
-          key={market.address}
-          market={market}
+          key={market.id}
+          market={{
+            ...market,
+          }}
           isMock={isMock}
         />
       ))}

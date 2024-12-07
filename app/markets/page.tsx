@@ -3,6 +3,8 @@ import { MarketList } from '@/components/MarketList'
 import TrendingMarkets from '@/components/TrendingMarkets'
 import PopularArtists from '@/components/PopularArtists'
 
+export const dynamic = 'force-dynamic'
+
 export default async function MarketsPage() {
   try {
     const markets = await getMarkets()

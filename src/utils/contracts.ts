@@ -1,13 +1,25 @@
 //'use client'
 
-import { Contract, JsonRpcSigner, BrowserProvider } from 'ethers';
-import { abi as MARKET_ABI } from '@/contracts/Market/Market.json';
-import { abi as FACTORY_ABI } from '@/contracts/MarketFactory/MarketFactory.json';
-import { abi as MOCK_ERC20_ABI } from '@/contracts/MockERC20/MockERC20.json';
-import { abi as GRAMMY_ERC20_ABI } from '@/contracts/GrammyERC20/GrammyERC20.json';
+import { Contract, JsonRpcSigner } from 'ethers';
+// import { abi as MARKET_ABI } from '@/contracts/Market/Market.json';
+// import { abi as FACTORY_ABI } from '@/contracts/MarketFactory/MarketFactory.json';
+// import { abi as MOCK_ERC20_ABI } from '@/contracts/MockERC20/MockERC20.json';
+// import { abi as GRAMMY_ERC20_ABI } from '@/contracts/GrammyERC20/GrammyERC20.json';
+
+
+import MARKET_CONTRACT from '@/contracts/Market/Market.json';
+import FACTORY_CONTRACT from '@/contracts/MarketFactory/MarketFactory.json';
+import MOCK_ERC20_CONTRACT from '@/contracts/MockERC20/MockERC20.json';
+import GRAMMY_ERC20_CONTRACT from '@/contracts/GrammyERC20/GrammyERC20.json';
 
 // Export the ABIs for use in other files
-export { FACTORY_ABI, MARKET_ABI, MOCK_ERC20_ABI, GRAMMY_ERC20_ABI };
+export const MARKET_ABI = MARKET_CONTRACT.abi;
+export const FACTORY_ABI = FACTORY_CONTRACT.abi;
+export const MOCK_ERC20_ABI = MOCK_ERC20_CONTRACT.abi;
+export const GRAMMY_ERC20_ABI = GRAMMY_ERC20_CONTRACT.abi;
+
+// Export the ABIs for use in other files
+///export { FACTORY_ABI, MARKET_ABI, MOCK_ERC20_ABI, GRAMMY_ERC20_ABI };
 
 // Contract addresses
 export const FACTORY_ADDRESS = '0x5EDBe9CB83806F7d54062aFc4a3BAcEd75c1cfa2';

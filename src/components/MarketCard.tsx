@@ -3,19 +3,20 @@
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useWallet } from '@/context/WalletContext';
-import type { Market } from '@/lib/types/market'
-import { calculatePercentage } from './market-card/utils'
-
-interface Nominee {
-  name: string;
-  odds: number;
-  imageUrl: string;
-}
+import type { MarketWithOutcomes } from '@/lib/types/market'
+//import { calculatePercentage } from './market-card/utils'
+import Image from 'next/image';
 
 interface MarketCardProps {
-  market: Market;
+  market: MarketWithOutcomes;
   isMock?: boolean;
 }
+
+/*// interface Nominee {
+//   name: string;
+//   odds: number;
+//   imageUrl: string;
+// }*/
 
 export function MarketCard({ 
   market,
@@ -25,7 +26,9 @@ export function MarketCard({
   const trend = '+5.2%';
   const market_imageUrl = 'https://i.scdn.co/image/ab67616d0000b2735076e4160d018e378f488c33'
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedNominee, setSelectedNominee] = useState<string | null>(null);
+  const [selectedNominee] = useState<string | null>(null);
+
+  // const [selectedNominee, setSelectedNominee] = useState<string | null>(null);
   const [betAmount, setBetAmount] = useState<string>("");
   const [selectedOutcomeId, setSelectedOutcomeId] = useState<string | null>(null);
 
@@ -84,9 +87,11 @@ export function MarketCard({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="w-1/3">
-          <img 
+          <Image 
             src={market_imageUrl} 
             alt={market.description} 
+            width={300}
+            height={300}
             className="h-full w-full object-cover"
           />
         </div>
@@ -132,12 +137,14 @@ export function MarketCard({
                   ${selectedNominee === nominee.entity.name 
                     ? 'bg-purple-600/20 ring-2 ring-purple-500' 
                     : 'bg-gray-700/50 hover:bg-gray-700'}`}
-                onClick={() => setSelectedNominee(nominee.entity.name)}
+                onClick={() => handleOutcomeSelect(nominee.id)}
               >
                 <div className="flex items-center space-x-4">
-                  <img 
+                  <Image 
                     src={nominee.entity.image_url} 
                     alt={nominee.entity.name}
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <span className="font-medium">{nominee.entity.name}</span>
@@ -145,7 +152,9 @@ export function MarketCard({
                 <div className="text-right">
                   <div className="text-sm text-gray-400">Likelihood</div>
                   <div className="font-bold text-purple-400">
-                    {calculatePercentage(nominee.total_stake, market.market_outcomes.reduce((sum, o) => sum + o.total_stake, 0)).toFixed(2)}%
+                    {/* {calculatePercentage(nominee.total_stake, market.market_outcomes.reduce((sum, o) => sum + o.total_stake, 0)).toFixed(2)}% */}
+                    {/* TODO: Add actual likelihood calculation */}
+                    0.00%
                   </div>
                 </div>
               </div>
@@ -174,7 +183,7 @@ export function MarketCard({
             {selectedNominee && betAmount && !isMock && (
               <div className="text-sm text-gray-400">
                 Potential win: <span className="text-purple-400 font-bold">
-                  ${(parseFloat(betAmount) * (market.find(n => n.name === selectedNominee)?.odds || 0)).toFixed(2)}
+                  ${(parseFloat(betAmount) * (market.market_outcomes.find(n => n.entity.name === selectedNominee)?.total_stake || 0)).toFixed(2)}
                 </span>
               </div>
             )}
