@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  
+  output: 'standalone', // Add this for Netlify deployment
   webpack: (config) => {
     if (!config.externals) {
       config.externals = []
@@ -13,16 +13,10 @@ const nextConfig = {
   },
   images: {
     domains: ['i.scdn.co'],
+    unoptimized: true, // Add this for Netlify deployment
+
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/',
-  //       permanent: true,
-  //     },
-  //   ]
-  // },
+
 }
 
 module.exports = nextConfig 

@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
 import { useWallet } from '@/context/WalletContext';
-import type { MarketWithOutcomes } from '@/lib/types/market'
+import type { Market } from '@/lib/types/market'
 //import { calculatePercentage } from './market-card/utils'
 import Image from 'next/image';
 
 interface MarketCardProps {
-  market: MarketWithOutcomes;
+  market: Market;
   isMock?: boolean;
 }
 

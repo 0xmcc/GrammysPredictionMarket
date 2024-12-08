@@ -2,15 +2,15 @@
 
 import { useState } from 'react'
 import { MarketCard } from './MarketCard'
-import type { MarketWithOutcomes } from '@/lib/types/market'
+import type { Market } from '@/lib/types/market'
 import { MOCK_MARKETS } from '@/lib/mocks/markets'
 
 interface MarketListProps {
-  initialMarkets: MarketWithOutcomes[]
+  initialMarkets: Market[]
 }
 
 export function MarketList({ initialMarkets }: MarketListProps) {
-  const [markets] = useState<MarketWithOutcomes[]>(
+  const [markets] = useState<Market[]>(
     initialMarkets.length > 0 ? initialMarkets : MOCK_MARKETS
   )
   const [isLoading] = useState(false)
